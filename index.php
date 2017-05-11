@@ -1,3 +1,28 @@
+<?php
+
+
+$hostname = "mysql.juices.world"; // the hostname you created when creating the database
+$username = "juicesworld";      // the username specified when setting up the database
+$password = "p@thw@y5";      // the password specified when setting up the database
+$database = "juicesworld";      // the database name chosen when setting up the database
+
+$link = mysqli_connect($hostname, $username, $password, $database);
+if (mysqli_connect_errno()) {
+   die("Connect failed: %s\n" + mysqli_connect_error());
+   exit();
+}
+
+
+/*
+ $db = mysqli_connect('mysql.juices.world','juicesworld','p@thw@y5','juice')
+ or die('Error connecting to MySQL server.');
+*/
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  echo $_POST['juicename'];
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +60,38 @@
 
   <div class="container">
     <img src="images/juicesWorldLogo.png" width=300 />
+
+    <ol class="juice">
+        <!--<li class="juice-item">
+          <a class="juice-link" href="#">Cucumber Lemonade</a>
+          <ul class="juice-meta">
+            <li class="juice-meta-item">
+              <em>Posted by:</em>
+              <a href="#">Sue Haas</a>
+            </li>
+            <li class="juice-meta-item">
+              <a href="">2 comments</a>
+            </li>
+            <li class="juice-meta-item">
+              <a class="js-like" href="#">Like this juice!</a>
+            </li>
+          </ul> -->
+
+        <?php
+        $query = "SELECT * FROM juice";
+        mysqli_query($link, $query) or die('Error querying database.');
+
+        $result = mysqli_query($link, $query);
+
+        while ($row = mysqli_fetch_array($result)) {
+         echo '<li class="juice-item"><a class="juice-link" href="#">' . $row['juicename'] . '</a></li>';
+        }
+
+        mysqli_close($link);
+        ?>
+
+      </ol>
+
   </div>
 
   <div class="footer">
